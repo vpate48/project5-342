@@ -1,0 +1,17 @@
+﻿Project 5 - Team #9
+Group Members:
+Ming Chen – mchen217@uic.edu
+Eldin Vujic – evujic2@uic.edu
+Ashley Santos – asanto3@uic.edu
+Vishal Patel – vpate48@uic.edu
+Number guessing game
+Project 5 Description:
+Four players will connect to a server. The server will generate a random number between 0-999. Each player will guess a number. The closet one gets one point and if they guess on the dot they get two points. Once a player get 10 points they win.
+
+
+
+
+
+
+How to play:
+Player connects to server and waits till 4 players are connected to server. Then when the round starts the player will enter a number in the Client system. The guess is from 0- 999. The closest guess to the number the person gets 1 point and if they are on the dot they get 2. Once they get 10 points the player wins.
