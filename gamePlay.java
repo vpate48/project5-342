@@ -1,5 +1,6 @@
 package sample;
-java.lang.Math;
+
+import java.lang.Math;
 
 
 public class gamePlay {
@@ -29,11 +30,19 @@ public class gamePlay {
     }
 
 
-    public static void generateNumber(){// generation of random number
-        double temp = Math.random();
-        temp = temp * 999;
-        guessNumber = (int) temp;
+    private static int generateNumber(){// generation of random number
+        double temp = Math.random();//generates number in double form
+        temp = temp * 999;// generates number in range
+        int number = (int) temp;// makes number an int
+        return number;
     }
+
+    public void makeNumber(){// use this function to generate number
+        guessNumber = generateNumber();
+
+    }
+
+
 
     public void setPGuess(int player, int guess){
         switch(player){
@@ -71,49 +80,49 @@ public class gamePlay {
         switch(player){
             case 1:// return player 1 guess
                 return p1Guess;
-                break;
 
             case 2:// return player 2 guess
                 return p2Guess;
-                break;
 
             case 3:// return player 3 guess
                 return p3Guess;
-                break;
 
             case 4:// return player 4 guess
                 return p4Guess;
-                break;
 
             default:
                 System.out.println(" Invalid Player");
-                break;
+                return (-1);
         }
     }
 
 
     public int getPClose(int close){
-        switch(player){
+        switch(close){
             case 1:// return player 1 difference
                 return p1Close;
-                break;
 
             case 2:// return player 2 difference
                 return p2Close;
-                break;
 
             case 3:// return player 3 difference
                 return p3Close;
-                break;
 
             case 4:// return player 4 difference
                 return p4Close;
-                break;
 
             default:
                 System.out.println(" Invalid Player");
-                break;
+                return (-1);
         }
     }
 
+    public int getGuessNumber(){
+        return guessNumber;
+    }
+
+    public int findWinner(){
+
+    }
 }
+
