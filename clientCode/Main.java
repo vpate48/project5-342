@@ -30,17 +30,25 @@ public class Main extends Application {
 
     HashMap<String, Scene> sceneMap;
     Scene loginScene,playScene;
-    Button connectToGame;
-    Label userNameLabel;
-    TextField enterUserName;
+    Button connectToGame,sendTextChat,sendNumberGuess;
+    Label userNameLabel, usersName;
+    TextField enterUserName,enterNumberGuess;
     String grabUser;
     BorderPane loginPane,playerPane;
 
     private NetworkConnection  conn = createClient();
     private TextArea messages = new TextArea();
+    private TextArea textBox = new TextArea();
 
-    private Parent createPlayScrene(){
-        messages.clear();
+    private Parent createPlayScene(){
+        VBox a = new VBox(10,textBox,enterNumberGuess);
+        HBox b = new HBox(10,sendTextChat,sendNumberGuess);
+        usersName.setText("User Name: " + grabUser);
+        playerPane.setCenter(a);
+        playerPane.setTop(usersName);
+        playerPane.setBottom(b);
+        return playerPane;
+
 
 
     }
@@ -63,12 +71,17 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception{
         sceneMap = new HashMap<String, Scene>();
         userNameLabel = new Label("User: ");
+        usersName = new Label("");
         enterUserName = new TextField();
+        enterNumberGuess = new TextField();
         connectToGame = new Button("Connect");
+        sendNumberGuess = new Button("Send Guess");
+        sendTextChat = new Button("Send Text Chat");
         loginPane = new BorderPane();
         playerPane = new BorderPane();
 
         loginScene = new Scene(createloginScene(), 200, 200);
+
         sceneMap.put("Login", loginScene);
 
         primaryStage.setScene(sceneMap.get("Login"));
@@ -83,20 +96,42 @@ public class Main extends Application {
 
                 grabUser = enterUserName.getText();
                 try {
+                    updateClient();
                     conn.send("Join " + grabUser);
+                    playScene = new Scene(createPlayScene(), 400, 400);
+                    sceneMap.put("Play", playScene);
+                    primaryStage.setScene(sceneMap.get("Play"));
 
                 }
                 catch(Exception e){
                     messages.appendText("Error type that in again\n");
-                }
-                if(!messages.getText().equals("User name currently in use")){
-
                 }
 
 
             }
 
         });
+
+
+
+        sendTextChat.setOnAction(new EventHandler<ActionEvent>() {
+
+            public void handle(ActionEvent event) {
+
+                grabUser = enterNumberGuess.getText();
+                try {
+                    enterNumberGuess.clear();
+                    conn.send("Text " + grabUser);
+                }
+                catch(Exception e){
+                    messages.appendText("Error type that in again\n");
+                }
+
+
+            }
+
+        });
+
 
 
 
@@ -125,6 +160,15 @@ public class Main extends Application {
             Platform.runLater(()->{
                 messages.appendText(data.toString() + "\n");
             });
+        });
+    }
+    private void updateClient() {
+
+        conn.setCallback(data -> {
+            Platform.runLater(() -> {
+                textBox.appendText(data.toString() + "\n");
+            });
+
         });
     }
 
