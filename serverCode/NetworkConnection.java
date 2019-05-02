@@ -35,13 +35,20 @@ public abstract class NetworkConnection {
         connthread.start();
     }
 
-
-
-    public void send(Serializable data) throws Exception{
-
-
+    public void sendMessage(Serializable data){
+        array.forEach(t -> {
+            try {
+                t.tout.writeObject(data);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
 
     }
+
+
+
+
 
 
 
@@ -112,33 +119,41 @@ public abstract class NetworkConnection {
                         youString= string.substring(0, spacePos);
                     }
 
+                    System.out.println(youString);
                     if(youString.equals("Join")){
 
                         String tempWord = youString + " ";
                         string = string.replaceAll(tempWord, "");
                         tempWord = " " + youString;
                         string = string.replaceAll(tempWord, "");
+                        String b = "";
                         for(int i = 0; i < players.size(); i ++){
                             if(players.get(i).returnName().equals(string)){
-                                tout.writeObject("User name currently in use");
-                                return;
+                                b = " 2";
                             }
                         }
                         player a = new player();
                         players.add(a);
-                        players.get(num-1).setName(string);
+                        players.get(num-1).setName(string + b);
                         players.get(num-1).setId(num);
 
 
                     }
+                    else if(youString.equals("Text")){
+                        String tempWord = youString + " ";
+                        string = string.replaceAll(tempWord, "");
+                        tempWord = " " + youString;
+                        string = string.replaceAll(tempWord, "");
+                        sendMessage(players.get(num-1).returnName() + ": " + string);
+                    }
 
 
-                    callback.accept("Player " + num + "\n" + players.get(num-1).returnName());
+                    callback.accept( players.get(num-1).returnName() + " is connected");
                     //send(data);
                 }
             }
             catch(Exception e){
-                callback.accept("Player " + num + "\n" + players.get(num-1).returnName() + " has quit");
+                callback.accept( players.get(num-1).returnName() + " has quit");
             }
         }
     }
