@@ -5,37 +5,37 @@ import java.lang.Math;
 
 public class gamePlay {
 
-    private int guessNumber;// the number players have to guess
+    private int guessNumber;// the number a player guessed
 
-    private int p1Guess;// guess of player 1
+    private int p1Guess;// guessed number of player 1
     private int p1Close;// how close is player 1
 
-    private int p2Guess;// guess of player 2
+    private int p2Guess;// guessed number of player 2
     private int p2Close;// how close is player 2
 
-    private int p3Guess;// guess of player 2
+    private int p3Guess;// guessed number of player 2
     private int p3Close;// how close is player 2
 
-    private int p4Guess;// guess of player 2
+    private int p4Guess;// guessed number of player 2
     private int p4Close;// how close is player 2
 
-    private boolean p1win ; // if player wins round
+    private boolean p1win ; // if a player wins round
     private boolean p2win ;
     private boolean p3win;
     private boolean p4win;
 
     gamePlay(int p1,int p2, int p3, int p4){
         p1Guess = p1;
-        p1Close = differnceFinder(guessNumber,p1Guess);
+        p1Close = differenceFinder(guessNumber,p1Guess);
 
         p2Guess = p2;
-        p2Close = differnceFinder(guessNumber,p2Guess);
+        p2Close = differenceFinder(guessNumber,p2Guess);
 
         p3Guess = p3;
-        p3Close = differnceFinder(guessNumber,p3Guess);
+        p3Close = differenceFinder(guessNumber,p3Guess);
 
         p4Guess = p4;
-        p4Close = differnceFinder(guessNumber,p4Guess);
+        p4Close = differenceFinder(guessNumber,p4Guess);
 
         p1win = false;
         p2win = false;
@@ -44,7 +44,7 @@ public class gamePlay {
 
     }
 
-    private int differnceFinder(int random, int choice){
+    private int differenceFinder(int random, int choice){
         int temp;
         temp = random - choice;
         if(temp < 0){
@@ -72,22 +72,22 @@ public class gamePlay {
         switch(player){
             case 1:// set player 1 guess
                 p1Guess = guess;
-                p1Close = differnceFinder(guessNumber,p1Guess);
+                p1Close = differenceFinder(guessNumber,p1Guess);
                 break;
 
             case 2:// set player 2 guess
                 p2Guess = guess;
-                p2Close = differnceFinder(guessNumber,p2Guess);
+                p2Close = differenceFinder(guessNumber,p2Guess);
                 break;
 
             case 3:// set player 3 guess
                 p3Guess = guess;
-                p3Close = differnceFinder(guessNumber,p3Guess);
+                p3Close = differenceFinder(guessNumber,p3Guess);
                 break;
 
             case 4:// set player 4 guess
                 p4Guess = guess;
-                p4Close = differnceFinder(guessNumber,p4Guess);
+                p4Close = differenceFinder(guessNumber,p4Guess);
                 break;
 
             default:
