@@ -22,11 +22,7 @@ public abstract class NetworkConnection {
     int amountPlayers;
     boolean clientOne, clientTwo;
     String dataone, datatwo;
-    int playeronePt=0, playertwoPt=0;
-
-
-
-
+    int playeronePt = 0, playertwoPt = 0;
 
     public NetworkConnection(Consumer<Serializable> callback) {
         this.callback = callback;
@@ -55,7 +51,6 @@ public abstract class NetworkConnection {
 
     }
 
-
     public void setPlayersPoints(player a,int b){
         for(int i = 0; i < players.size(); i ++){
             if(a.returnName().equals(players.get(i).returnName())){
@@ -79,18 +74,6 @@ public abstract class NetworkConnection {
         return 0;
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
     public void closeConn() throws Exception{
         connthread.socket.close();
     }
@@ -98,9 +81,6 @@ public abstract class NetworkConnection {
     abstract protected boolean isServer();
     abstract protected String getIP();
     abstract protected int getPort();
-
-
-
 
     class ConnThread extends Thread{
         private Socket socket;
@@ -122,9 +102,6 @@ public abstract class NetworkConnection {
 
         }
     }
-
-
-
 
     public class ClientThread extends Thread{
         int num;
@@ -314,8 +291,6 @@ public abstract class NetworkConnection {
             playerPoints = 0;
         }
 
-
-
         public void setName(String i){
             name = i;
         }
@@ -335,8 +310,7 @@ public abstract class NetworkConnection {
 
         public int getGuesses(){ return guesses;}
 
-        public void deleteGuess(){ guesses= guesses-1;
-        }
+        public void deleteGuess(){ guesses= guesses-1;}
 
         public void setGuesses(int g){ guesses = g;}
 
@@ -374,7 +348,6 @@ public abstract class NetworkConnection {
         }
     }
 
-
     public class Gameplay{
         private int guessNumber;
 
@@ -385,14 +358,11 @@ public abstract class NetworkConnection {
             return number;
         }
 
-
-
         public boolean winOrLose(int guess){
             if(guess == guessNumber)
                 return true;
             else
                 return false;
-
         }
 
         public String howClose(int guess){
@@ -404,10 +374,7 @@ public abstract class NetworkConnection {
         }
 
 
-
-
     }
-
 
 }
 
