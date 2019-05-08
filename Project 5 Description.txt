@@ -9,14 +9,15 @@ Number Guessing Game
 
 Project 5 Description:
 Four players will connect to a server. The server will generate a random number between 0-999.
-Each player will guess a number. The player with the closest number to the server generated number
-will receive one point. However, if their guess is the exact number as the server generated number
-they will receive bonus points as described by the following:
+Each player will guess a number(5 tryes). The player with the closest number to the server generated number
+will receive points.
 Bonus Points Breakdown:
-  1st round: 10 bonus points
-  2nd round: 9 bonus points
-  3rd round: 8 bonus points
-  ... etc.
+  1st guess: 10 points
+  2nd guess: 4 points
+  3rd guess: 3 points
+   4th guess 2 pts
+  last guess1pts
+  
 
 Once a player get 10 points they win. 
 Another feature is that players can also chat with each other with the 
@@ -24,5 +25,4 @@ Another feature is that players can also chat with each other with the
 How to Play:
 Player connects to server and will have to wait until 4 players are connected to server. 
 Then when the round starts the player will enter a number in the Client system. 
-The guess is from 0 - 999. The closest guess to the number the person gets one point, and if they are on the dot they get bounus points. 
-Once the player reaches a score of 10 points, the player wins.
+The guess is from 0 - 999. they get five guess points are explained above.
