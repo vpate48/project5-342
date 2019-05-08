@@ -17,12 +17,17 @@ public abstract class NetworkConnection {
     ArrayList<player> players;
     ArrayList<ClientThread> array;
     Gameplay game;
+    int winNumber = 50;
     boolean checking;
     int guessesPlayers;
     int amountPlayers;
     boolean clientOne, clientTwo;
     String dataone, datatwo;
-    int playeronePt = 0, playertwoPt = 0;
+    int playeronePt=0, playertwoPt=0;
+
+
+
+
 
     public NetworkConnection(Consumer<Serializable> callback) {
         this.callback = callback;
@@ -51,6 +56,7 @@ public abstract class NetworkConnection {
 
     }
 
+
     public void setPlayersPoints(player a,int b){
         for(int i = 0; i < players.size(); i ++){
             if(a.returnName().equals(players.get(i).returnName())){
@@ -64,7 +70,7 @@ public abstract class NetworkConnection {
                sendMessage(players.get(i).returnName() + " Points: " + players.get(i).getPlayerPoints());
             }
     }
-    
+
     public int getIndex(player a){
         for(int i = 0; i < players.size(); i ++) {
             if (a.returnName().equals(players.get(i).returnName())) {
@@ -74,6 +80,18 @@ public abstract class NetworkConnection {
         return 0;
     }
 
+
+
+
+
+
+
+
+
+
+
+
+
     public void closeConn() throws Exception{
         connthread.socket.close();
     }
@@ -81,6 +99,9 @@ public abstract class NetworkConnection {
     abstract protected boolean isServer();
     abstract protected String getIP();
     abstract protected int getPort();
+
+
+
 
     class ConnThread extends Thread{
         private Socket socket;
@@ -103,6 +124,9 @@ public abstract class NetworkConnection {
         }
     }
 
+
+
+
     public class ClientThread extends Thread{
         int num;
         player a = new player();
@@ -124,7 +148,6 @@ public abstract class NetworkConnection {
                 socket.setTcpNoDelay(true);
                 this.tout = out;
                 this.tin = in;
-                amountPlayers++;
                 tout.writeObject("Welcome! Amount of players join:" + num );
 
                 while(true){
@@ -139,6 +162,7 @@ public abstract class NetworkConnection {
                     }
 
                     System.out.println(youString);
+                    System.out.println(data.toString());
                     if(youString.equals("Join")){
                         int inUse = 0;
                         String tempWord = youString + " ";
@@ -165,7 +189,9 @@ public abstract class NetworkConnection {
                         }
                         else{
                             a.updateClientStatus(true);
+                            a.setGuesses(5);
                             tout.writeObject("You have sucessfully joined the game!");
+                            amountPlayers++;
                         }
 
                         /*player a = new player();
@@ -178,8 +204,9 @@ public abstract class NetworkConnection {
 
                             if(amountPlayers == 4){
                                 sendMessage("Game is starting since we have 4 players!\nAll players have 5 guesses! Guess on spot you get 10 points.\n Guess on 5 tries get 5 points, 4 tries 4 points, etc");
-                                game.generateNumber();
                                 sendMessage("Random Number has been generated. Good luck");
+                                game = new Gameplay();
+                                game.generateNumber();
                             }
 
 
@@ -207,57 +234,98 @@ public abstract class NetworkConnection {
                                     sendMessage(a.returnName() + " has guessed SPOT on! 10 points for him");
                                     a.setGuesses(5);
                                     a.setPlayerPoints(10);
-                                    setPlayersPoints(a,10);
+                                    a.updateClientStatus(false);
+                                    //setPlayersPoints(a,10);
+                                    currently = " has guessed " + string + " and got 10 points for being SPOT ON!";
+                                    if(a.getPlayerPoints() >= winNumber){
+                                        sendMessage(a.returnName() + " the Winner has reached " + winNumber + " points! Now to win this next round you must reach "+ winNumber*2 +" points");
+                                        winNumber=winNumber*2;
+                                    }
+                                    guessesPlayers++;
                                 }
-                                if(winorlose == true){
+                                else if(winorlose == true){
                                     sendMessage(a.returnName() + " has guessed! "+ a.getGuesses() + " points for the player!");
-                                    a.setGuesses(5);
                                     a.setPlayerPoints(a.getGuesses());
-                                    setPlayersPoints(a,a.getGuesses());
+                                    //setPlayersPoints(a,a.getGuesses());
+                                    a.updateClientStatus(false);
+                                    a.setGuesses(5);
+                                    currently = " has guessed " + string + " and got " + a.getPlayerPoints() + " points";
+
+                                    if(a.getPlayerPoints() >= winNumber){
+                                        sendMessage(a.returnName() + " the Winner has reached " + winNumber + " points! Now to win this next round you must reach "+ winNumber*2 +" points");
+                                        winNumber=winNumber*2;
+                                    }
+                                    guessesPlayers++;
                                 }
                                 else{
                                     String howcloseYou = game.howClose(result);
                                     tout.writeObject(howcloseYou);
                                     a.deleteGuess();
                                     if(a.getGuesses() !=0 ) {
-                                        sendMessage(a.returnName() + " has guessed " + result + " and was off. The player has\n " + a.getGuesses() + " guesses left");
+                                        sendMessage(a.returnName() + " has guessed " + result + " and was off. Player "+a.returnName() +" has\n " + a.getGuesses() + " guesses left\n");
+                                        currently = " has guessed " + string;
                                     }
                                     else{
                                         sendMessage(a.returnName() + " has run out of guesses!");
                                         a.updateClientStatus(false);
                                         guessesPlayers++;
-                                        if(guessesPlayers == 4){
-                                            sendMessage("Round finished! These are all the current points for all players\n To play again click the Play again button!");
-                                            getPlayersPoints();
-                                            guessesPlayers = 0;
-                                            amountPlayers= 0;
+                                        currently = " has ran out of guesses ";
 
-                                        }
                                     }
 
                                 }
                             }
                             else{
-                                tout.writeObject("You can't guess anymore!");
+                                tout.writeObject("You can't guess!");
                             }
+
+                            if(guessesPlayers == 4){
+                                sendMessage("Round finished! These are all the current points for all players\n To play again click the Play again button!");
+                                getPlayersPoints();
+
+                                guessesPlayers = 0;
+                                amountPlayers= 0;
+
+                            }
+
 
 
                         }
                         else {
-                            sendMessage("Player " + a.returnName() + " you can't guess a number currently\n due to there being " + amountPlayers + " players in. You need 4 players to play.");
+                            tout.writeObject("Player " + a.returnName() + " you can't guess a number currently\n due to there being " + amountPlayers + " players in. You need 4 players to play.");
                             currently = " tried to send a number guess";
                         }
                     }
-
-                    else if(youString.equals("PlayAgain")){
-                        if(amountPlayers <= 4){
+                    else if(data.toString().equals("PlayAgain")){
+                        if(amountPlayers < 4 && a.getClientStatus() != true){
                             a.updateClientStatus(true);
                             a.setGuesses(5);
                             amountPlayers++;
-                            sendMessage("Player " + a.returnName() + " has joined the next round");
+                            System.out.println(amountPlayers);
+                            sendMessage("Player " + a.returnName() + " has joined the next round " + amountPlayers + "/4");
+                            if(amountPlayers == 4){
+                                sendMessage("Game is starting since we have 4 players!\nAll players have 5 guesses! Guess on spot you get 10 points.\n Guess on 5 tries get 5 points, 4 tries 4 points, etc");
+                                sendMessage("Random Number has been generated. Good luck");
+                                game = new Gameplay();
+                                game.generateNumber();
+                            }
                         }
-                        else
-                            tout.writeObject("Game is currently full");
+                        else{
+                            if(a.getClientStatus() == true)
+                                tout.writeObject("You are already in the game!");
+                            else
+                                tout.writeObject("The game is full!");
+                        }
+
+                    }
+
+                    else if(data.toString().equals("PlayersOn")){
+                        for(int i = 0; i < players.size(); i++){
+                            tout.writeObject("_______________________________________________________");
+                            tout.writeObject("Player: " + players.get(i).returnName() + " is on.");
+                            tout.writeObject("Points: " + players.get(i).getPlayerPoints());
+                            tout.writeObject("_______________________________________________________");
+                        }
                     }
 
 
@@ -269,7 +337,8 @@ public abstract class NetworkConnection {
             catch(Exception e){
                 callback.accept( a.returnName() + " has quit");
                 sendMessage(a.returnName() + " has left the game");
-                amountPlayers--;
+                if(amountPlayers != 0)
+                    amountPlayers--;
                 sendMessage(amountPlayers + " players are currently waiting to play a game");
             }
         }
@@ -291,6 +360,8 @@ public abstract class NetworkConnection {
             playerPoints = 0;
         }
 
+
+
         public void setName(String i){
             name = i;
         }
@@ -310,7 +381,8 @@ public abstract class NetworkConnection {
 
         public int getGuesses(){ return guesses;}
 
-        public void deleteGuess(){ guesses= guesses-1;}
+        public void deleteGuess(){ guesses= guesses-1;
+        }
 
         public void setGuesses(int g){ guesses = g;}
 
@@ -348,21 +420,25 @@ public abstract class NetworkConnection {
         }
     }
 
+
     public class Gameplay{
         private int guessNumber;
 
-        public int generateNumber(){// generation of random number
+        public void generateNumber(){// generation of random number
             double temp = Math.random();//generates number in double form
             temp = temp * 999;// generates number in range
             int number = (int) temp;// makes number an int
-            return number;
+            guessNumber = 5;
         }
+
+
 
         public boolean winOrLose(int guess){
             if(guess == guessNumber)
                 return true;
             else
                 return false;
+
         }
 
         public String howClose(int guess){
@@ -370,11 +446,14 @@ public abstract class NetworkConnection {
                 return "Your guess "+ guess + " is high";
             }
             else
-                return "Your guess" + guess + " is low";
+                return "Your guess " + guess + " is low";
         }
 
 
+
+
     }
+
 
 }
 
