@@ -9,7 +9,7 @@ Number Guessing Game
 
 Project 5 Description:
 Four players will connect to a server. The server will generate a random number between 0-999.
-Each player will guess a number. The closet one gets one point and if they guess on the dot they get bonus points. 
+Each player will guess a number. The closest one gets one point and if they guess on the dot they get bonus points. 
 Once a player get 10 points they win. players can also chat with each other with the 
 bounus points(on the dot guess):
 1st round: 10
