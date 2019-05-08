@@ -24,13 +24,13 @@ import javafx.scene.layout.HBox;
 
 public class Main extends Application {
 
+    private NetworkConnection  conn;
+    private TextArea messages = new TextArea();
+    
     Button portNumber,quit;
     TextField text;
     Label serverStatus;
     BorderPane pane;
-
-    private NetworkConnection  conn;
-    private TextArea messages = new TextArea();
 
 
     private Parent createContent() {
