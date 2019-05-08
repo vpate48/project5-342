@@ -48,11 +48,7 @@ public class Main extends Application {
         playerPane.setTop(usersName);
         playerPane.setBottom(b);
         return playerPane;
-
-
-
     }
-
 
     private Parent createloginScene() {
         messages.setPrefSize(50,50);
@@ -61,7 +57,6 @@ public class Main extends Application {
         loginPane.setCenter(a);
         return loginPane;
     }
-
 
     public static void main(String[] args) {
         launch(args);
@@ -87,14 +82,9 @@ public class Main extends Application {
         primaryStage.setScene(sceneMap.get("Login"));
         primaryStage.show();
 
-
-
-
         connectToGame.setOnAction(new EventHandler<ActionEvent>() {
-
             public void handle(ActionEvent event) {
                 int a = 0;
-
                 grabUser = enterUserName.getText();
                 try {
                     conn.send("Join " + grabUser);
@@ -102,25 +92,15 @@ public class Main extends Application {
                     playScene = new Scene(createPlayScene(), 400, 400);
                     sceneMap.put("Play", playScene);
                     primaryStage.setScene(sceneMap.get("Play"));
-
-
-
                 }
                 catch(Exception e){
                     messages.appendText("Error type that in again\n");
                 }
-
-
             }
-
         });
 
-
-
         sendTextChat.setOnAction(new EventHandler<ActionEvent>() {
-
             public void handle(ActionEvent event) {
-
                 grabUser = enterNumberGuess.getText();
                 try {
                     enterNumberGuess.clear();
@@ -129,16 +109,11 @@ public class Main extends Application {
                 catch(Exception e){
                     messages.appendText("Error type that in again\n");
                 }
-
-
             }
-
         });
 
         sendNumberGuess.setOnAction(new EventHandler<ActionEvent>() {
-
             public void handle(ActionEvent event) {
-
                 grabUser = enterNumberGuess.getText();
                 try {
                     enterNumberGuess.clear();
@@ -147,21 +122,9 @@ public class Main extends Application {
                 catch(Exception e){
                     messages.appendText("Error\n");
                 }
-
-
             }
-
         });
-
-
-
-
-
     }
-
-
-
-
 
     @Override
     public void init() throws Exception{
@@ -176,7 +139,6 @@ public class Main extends Application {
     }
 
     private Client createClient() {
-
         return new Client("127.0.0.1", 5555, data -> {
             Platform.runLater(()->{
                 messages.appendText(data.toString() + "\n");
@@ -184,7 +146,6 @@ public class Main extends Application {
         });
     }
     private void updateClient() {
-
         conn.setCallback(data -> {
             Platform.runLater(() -> {
                 textBox.appendText(data.toString() + "\n");
@@ -192,9 +153,4 @@ public class Main extends Application {
 
         });
     }
-
-
-
-
-
 }
