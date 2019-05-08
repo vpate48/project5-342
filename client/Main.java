@@ -28,6 +28,10 @@ import javafx.scene.control.Label;
 
 public class Main extends Application {
 
+    private NetworkConnection  conn = createClient();
+    private TextArea messages = new TextArea();
+    private TextArea textBox = new TextArea();
+    
     HashMap<String, Scene> sceneMap;
     Scene loginScene,playScene;
     Button connectToGame,sendTextChat,sendNumberGuess,playAgain,playersOn;
@@ -36,9 +40,7 @@ public class Main extends Application {
     String grabUser;
     BorderPane loginPane,playerPane;
 
-    private NetworkConnection  conn = createClient();
-    private TextArea messages = new TextArea();
-    private TextArea textBox = new TextArea();
+ 
 
     private Parent createPlayScene(){
         VBox a = new VBox(10,textBox,enterNumberGuess);
